@@ -4,9 +4,9 @@ fn main() {
         pub fn climb_stairs(n: i32) -> i32 {
             let x = n - 1;
             let y = n - 2;
-            0
+            x + y
         }
     }
 
-    Solution::climb_stairs(10);
+    println!("{}", Solution::climb_stairs(4));
 }
