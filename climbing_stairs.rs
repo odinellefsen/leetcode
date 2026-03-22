@@ -1,3 +1,5 @@
 fn main() {
-    println!("Hello, world!");
+    impl Solution {
+        pub fn climb_stairs(n: i32) -> i32 {}
+    }
 }
