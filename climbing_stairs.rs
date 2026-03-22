@@ -3,6 +3,7 @@ fn main() {
     impl Solution {
         pub fn climb_stairs(n: i32) -> i32 {
             let mut x = 0;
+
             if (n - 1 == 0) {
                 x = 1;
             } else {
@@ -10,11 +11,13 @@ fn main() {
             }
 
             let mut y = 0;
+
             if (n - 2 >= 0) {
                 y = n - 2;
             } else {
                 y = n - 2;
             }
+
             x + y
         }
     }
