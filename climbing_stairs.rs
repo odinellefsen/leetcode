@@ -2,9 +2,14 @@ fn main() {
     struct Solution;
     impl Solution {
         pub fn climb_stairs(n: i32) -> i32 {
-            n - 1 + n - 2
+            let x = n - 1;
+            let mut y = 0;
+            if (n - 2 >= 0) {
+                y = n - 2;
+            }
+            x + y
         }
     }
 
-    println!("{}", Solution::climb_stairs(4));
+    println!("{}", Solution::climb_stairs(1));
 }
