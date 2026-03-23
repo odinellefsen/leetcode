@@ -14,6 +14,8 @@ fn main() {
     }
     struct Solution;
     impl Solution {
-        pub fn delete_duplicates(head: Option<Box<ListNode>>) -> Option<Box<ListNode>> {}
+        pub fn delete_duplicates(head: Option<Box<ListNode>>) -> Option<Box<ListNode>> {
+            head
+        }
     }
 }
