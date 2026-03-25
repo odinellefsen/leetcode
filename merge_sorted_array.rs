@@ -4,7 +4,7 @@ impl Solution {
     pub fn merge(nums1: &mut Vec<i32>, m: i32, nums2: &mut Vec<i32>, n: i32) {
         let mut i: usize = 0;
         let mut j: usize = 0;
-        let mut arr: Vec<i32> = vec![67, 69];
+        let mut arr: Vec<i32> = vec![];
 
         while i < nums1.len() {
             println!("{}", nums1[i]);
