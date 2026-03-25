@@ -7,8 +7,11 @@ impl Solution {
         let mut i: usize = 0;
         let mut j: usize = 0;
         let mut arr: Vec<i32> = vec![67, 69];
-        while i < arr.len() {
-            println!("{}", arr[i]);
+        while i < nums1.len() {
+            while j < nums2.len() {
+                println!("{}", nums2[j]);
+                j += 1;
+            }
             i += 1;
         }
     }
