@@ -4,8 +4,14 @@ impl Solution {
     pub fn merge(nums1: &mut Vec<i32>, m: i32, nums2: &mut Vec<i32>, n: i32) {
         println!("m = {m}, n = {n}");
         println!("nums1 = {:?}, nums2 = {:?}", nums1, nums2);
-        for value in nums1 {
-            println!("{}", value);
+        let mut i = 0;
+        let mut j = 0;
+        let mut arr: Vec<i32> = vec![];
+        while i >= 0 {
+            let current_i = 
+            while j >= 0 {
+
+            }
         }
     }
 }
