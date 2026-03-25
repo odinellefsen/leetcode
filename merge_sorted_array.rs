@@ -4,6 +4,9 @@ impl Solution {
     pub fn merge(nums1: &mut Vec<i32>, m: i32, nums2: &mut Vec<i32>, n: i32) {
         println!("m = {m}, n = {n}");
         println!("nums1 = {:?}, nums2 = {:?}", nums1, nums2);
+        for value in nums1 {
+            println!("{}", value);
+        }
     }
 }
 
