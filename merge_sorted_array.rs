@@ -7,6 +7,7 @@ impl Solution {
         let mut i: usize = 0;
         let mut j: usize = 0;
         let mut arr: Vec<i32> = vec![67, 69];
+        println!("{}", nums1[-1]);
         while i < nums1.len() {
             println!("{}", nums1[i]);
             while j < nums2.len() {
