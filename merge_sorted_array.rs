@@ -20,6 +20,12 @@ impl Solution {
                 i += 1;
                 j += 1;
             }
+
+            if i >= nums1.len() {
+                iterating = false;
+            } else if j >= nums2.len() {
+                iterating = false;
+            }
         }
 
         println!("{:?}", arr)
