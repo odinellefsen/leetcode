@@ -8,9 +8,13 @@ impl Solution {
 
         let mut iterating: bool = true;
         while iterating {
-            if (nums1[i] > nums2[j]) {
-                arr.push[nums1[i]];
+            if nums1[i] > nums2[j] {
+                arr.push(nums1[i]);
                 i += 1;
+            }
+            if nums2[j] > nums1[i] {
+                arr.push(nums2[j]);
+                j += 1;
             }
         }
 
