@@ -6,26 +6,28 @@ impl Solution {
         let mut j: usize = 0;
         let mut arr: Vec<i32> = vec![];
 
-        let mut iterating: bool = true;
-        while iterating {
-            if nums1[i] > nums2[j] {
-                arr.push(nums2[j]);
-                j += 1;
-            } else if nums2[j] > nums1[i] {
+        let mut i = 0;
+        let mut j = 0;
+        let mut arr = vec![];
+
+        while i < nums1.len() && j < nums2.len() {
+            if nums1[i] <= nums2[j] {
                 arr.push(nums1[i]);
                 i += 1;
             } else {
-                arr.push(nums1[i]);
                 arr.push(nums2[j]);
-                i += 1;
                 j += 1;
             }
+        }
 
-            if i >= nums1.len() {
-                iterating = false;
-            } else if j >= nums2.len() {
-                iterating = false;
-            }
+        while i < nums1.len() {
+            arr.push(nums1[i]);
+            i += 1;
+        }
+
+        while j < nums2.len() {
+            arr.push(nums2[j]);
+            j += 1;
         }
 
         println!("{:?}", arr)
