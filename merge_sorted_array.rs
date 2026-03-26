@@ -7,10 +7,8 @@ impl Solution {
         let mut arr: Vec<i32> = vec![];
 
         while i < nums1.len() {
-            println!("{}", nums1[i]);
             arr.push(nums1[i]);
             while j < nums2.len() {
-                println!("{}", nums2[j]);
                 j += 1;
             }
             j = 0;
