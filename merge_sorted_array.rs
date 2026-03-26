@@ -6,14 +6,8 @@ impl Solution {
         let mut j: usize = 0;
         let mut arr: Vec<i32> = vec![];
 
-        while i < nums1.len() {
-            arr.push(nums1[i]);
-            while j < nums2.len() {
-                j += 1;
-            }
-            j = 0;
-            i += 1;
-        }
+        let mut iterating: bool = true;
+        while iterating {}
 
         println!("{:?}", arr)
     }
