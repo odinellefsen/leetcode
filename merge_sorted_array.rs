@@ -29,8 +29,6 @@ impl Solution {
             arr.push(nums2[j]);
             j += 1;
         }
-
-        println!("{:?}", arr)
     }
 }
 
