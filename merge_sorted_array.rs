@@ -11,9 +11,13 @@ impl Solution {
             if nums1[i] > nums2[j] {
                 arr.push(nums1[i]);
                 i += 1;
-            }
-            if nums2[j] > nums1[i] {
+            } else if nums2[j] > nums1[i] {
                 arr.push(nums2[j]);
+                j += 1;
+            } else {
+                arr.push(nums1[i]);
+                arr.push(nums2[j]);
+                i += 1;
                 j += 1;
             }
         }
