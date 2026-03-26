@@ -7,7 +7,12 @@ impl Solution {
         let mut arr: Vec<i32> = vec![];
 
         let mut iterating: bool = true;
-        while iterating {}
+        while iterating {
+            if (nums1[i] > nums2[j]) {
+                arr.push[nums1[i]];
+                i += 1;
+            }
+        }
 
         println!("{:?}", arr)
     }
