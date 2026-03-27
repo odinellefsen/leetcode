@@ -31,7 +31,7 @@ impl Solution {
             j += 1;
         }
 
-        return arr;
+        arr
     }
 }
 
