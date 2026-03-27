@@ -9,7 +9,7 @@ impl Solution {
         let mut j: usize = 0;
         let mut arr: Vec<i32> = Vec::new();
 
-        // Temporary redeclaration kept during iterative refactor.
+        // Temporary redeclaration kept during iterative refactor (still not final).
         let mut i = 0;
         let mut j = 0;
         let mut arr = Vec::new();
