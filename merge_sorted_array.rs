@@ -14,6 +14,7 @@ impl Solution {
         let mut j = 0;
         let mut arr = Vec::new();
 
+        // TODO: switch to pointer-from-end strategy for true in-place merge.
         while i < nums1.len() && j < nums2.len() {
             if nums1[i] <= nums2[j] {
                 arr.push(nums1[i]);
