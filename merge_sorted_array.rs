@@ -44,5 +44,5 @@ fn main() {
     let mut nums2 = vec![2, 4, 6, 8];
 
     let merged_preview = Solution::merge(&mut nums1, 4, &mut nums2, 4);
-    println!("merged length: {}", merged_preview.len());
+    println!("preview length: {}", merged_preview.len());
 }
