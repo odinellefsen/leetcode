@@ -39,5 +39,5 @@ fn main() {
     let mut nums1 = vec![1, 3, 5, 7];
     let mut nums2 = vec![2, 4, 6, 8];
 
-    let sorted_arr = Solution::merge(&mut nums1, 4, &mut nums2, 3);
+    let merged_preview = Solution::merge(&mut nums1, 4, &mut nums2, 3);
 }
