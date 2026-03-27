@@ -8,6 +8,7 @@ impl Solution {
         let mut j: usize = 0;
         let mut arr: Vec<i32> = vec![];
 
+        // Temporary redeclaration kept during iterative refactor.
         let mut i = 0;
         let mut j = 0;
         let mut arr = vec![];
