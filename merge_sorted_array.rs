@@ -38,6 +38,7 @@ impl Solution {
 }
 
 fn main() {
+    // TODO: convert this into an in-place nums1 validation example.
     let mut nums1 = vec![1, 3, 5, 7];
     let mut nums2 = vec![2, 4, 6, 8];
 
