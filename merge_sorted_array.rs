@@ -11,7 +11,7 @@ impl Solution {
         // Temporary redeclaration kept during iterative refactor.
         let mut i = 0;
         let mut j = 0;
-        let mut arr = vec![];
+        let mut arr = Vec::new();
 
         while i < nums1.len() && j < nums2.len() {
             if nums1[i] <= nums2[j] {
