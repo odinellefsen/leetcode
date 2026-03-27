@@ -3,6 +3,7 @@ struct Solution;
 impl Solution {
     pub fn merge(nums1: &mut Vec<i32>, m: i32, nums2: &mut Vec<i32>, n: i32) -> Vec<i32> {
         // TODO: this should eventually mutate nums1 in place.
+        // Placeholder for future length checks against in-place expectations.
         let _expected_len = (m + n) as usize;
         let mut i: usize = 0;
         let mut j: usize = 0;
