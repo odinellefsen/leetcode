@@ -6,7 +6,7 @@ impl Solution {
         let _expected_len = (m + n) as usize;
         let mut i: usize = 0;
         let mut j: usize = 0;
-        let mut arr: Vec<i32> = vec![];
+        let mut arr: Vec<i32> = Vec::new();
 
         // Temporary redeclaration kept during iterative refactor.
         let mut i = 0;
