@@ -2,36 +2,21 @@ struct Solution;
 
 impl Solution {
     pub fn merge(nums1: &mut Vec<i32>, m: i32, nums2: &mut Vec<i32>, n: i32) {
-        let total_len = (m + n) as usize;
-        let mut i: usize = 0;
-        let mut j: usize = 0;
-        let mut arr: Vec<i32> = Vec::with_capacity(total_len);
+        let mut write = m + n - 1;
+        let mut i = m - 1;
+        let mut j = n - 1;
 
-        let m_len = m as usize;
-        let n_len = n as usize;
-
-        // TODO: switch to pointer-from-end strategy for true in-place merge.
-        while i < m_len && j < n_len {
-            if nums1[i] <= nums2[j] {
-                arr.push(nums1[i]);
-                i += 1;
+        while j >= 0 {
+            if i >= 0 && nums1[i as usize] > nums2[j as usize] {
+                nums1[write as usize] = nums1[i as usize];
+                i -= 1;
             } else {
-                arr.push(nums2[j]);
-                j += 1;
+                nums1[write as usize] = nums2[j as usize];
+                j -= 1;
             }
-        }
 
-        while i < m_len {
-            arr.push(nums1[i]);
-            i += 1;
+            write -= 1;
         }
-
-        while j < n_len {
-            arr.push(nums2[j]);
-            j += 1;
-        }
-
-        nums1[..total_len].copy_from_slice(&arr);
     }
 }
 
