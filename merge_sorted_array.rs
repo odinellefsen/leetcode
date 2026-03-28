@@ -26,4 +26,9 @@ fn main() {
 
     Solution::merge(&mut nums1, 3, &mut nums2, 3);
     assert_eq!(nums1, vec![1, 2, 2, 3, 5, 6]);
+
+    let mut nums1 = vec![0];
+    let mut nums2 = vec![1];
+    Solution::merge(&mut nums1, 0, &mut nums2, 1);
+    assert_eq!(nums1, vec![1]);
 }
