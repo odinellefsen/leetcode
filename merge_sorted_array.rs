@@ -21,10 +21,9 @@ impl Solution {
 }
 
 fn main() {
-    // TODO: convert this into an in-place nums1 validation example.
-    let mut nums1 = vec![1, 3, 5, 7, 0, 0, 0, 0];
-    let mut nums2 = vec![2, 4, 6, 8];
+    let mut nums1 = vec![1, 2, 3, 0, 0, 0];
+    let mut nums2 = vec![2, 5, 6];
 
-    Solution::merge(&mut nums1, 4, &mut nums2, 4);
-    println!("merged nums1: {:?}", nums1);
+    Solution::merge(&mut nums1, 3, &mut nums2, 3);
+    assert_eq!(nums1, vec![1, 2, 2, 3, 5, 6]);
 }
