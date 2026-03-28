@@ -9,8 +9,11 @@ impl Solution {
         let mut j: usize = 0;
         let mut arr: Vec<i32> = Vec::new();
 
+        let m_len = m as usize;
+        let n_len = n as usize;
+
         // TODO: switch to pointer-from-end strategy for true in-place merge.
-        while i < nums1.len() && j < nums2.len() {
+        while i < m_len && j < n_len {
             if nums1[i] <= nums2[j] {
                 arr.push(nums1[i]);
                 i += 1;
@@ -20,12 +23,12 @@ impl Solution {
             }
         }
 
-        while i < nums1.len() {
+        while i < m_len {
             arr.push(nums1[i]);
             i += 1;
         }
 
-        while j < nums2.len() {
+        while j < n_len {
             arr.push(nums2[j]);
             j += 1;
         }
