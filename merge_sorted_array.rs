@@ -33,6 +33,7 @@ impl Solution {
             j += 1;
         }
 
+        nums1[..expected_len].copy_from_slice(&arr);
         arr
     }
 }
