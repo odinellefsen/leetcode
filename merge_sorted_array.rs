@@ -2,12 +2,10 @@ struct Solution;
 
 impl Solution {
     pub fn merge(nums1: &mut Vec<i32>, m: i32, nums2: &mut Vec<i32>, n: i32) {
-        // TODO: this should eventually mutate nums1 in place.
-        // Placeholder for future length checks against in-place expectations.
-        let expected_len = (m + n) as usize;
+        let total_len = (m + n) as usize;
         let mut i: usize = 0;
         let mut j: usize = 0;
-        let mut arr: Vec<i32> = Vec::with_capacity(expected_len);
+        let mut arr: Vec<i32> = Vec::with_capacity(total_len);
 
         let m_len = m as usize;
         let n_len = n as usize;
@@ -33,7 +31,7 @@ impl Solution {
             j += 1;
         }
 
-        nums1[..expected_len].copy_from_slice(&arr);
+        nums1[..total_len].copy_from_slice(&arr);
     }
 }
 
