@@ -34,7 +34,9 @@ impl Solution {
         let mut result: Vec<i32> = Vec::new();
         let mut stack: Vec<Rc<RefCell<TreeNode>>> = Vec::new();
         Self::push_left_spine(root, &mut stack);
-        let _ = &mut result;
+        if let Some(node) = stack.pop() {
+            result.push(node.borrow().val);
+        }
 
         // TODO: implement inorder traversal.
         result
