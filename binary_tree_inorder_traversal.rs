@@ -22,6 +22,14 @@ use std::rc::Rc;
 type Node = Option<Rc<RefCell<TreeNode>>>;
 
 impl Solution {
+    fn push_left_spine(mut curr: Node, stack: &mut Vec<Rc<RefCell<TreeNode>>>) {
+        while let Some(node) = curr {
+            let left = node.borrow().left.clone();
+            stack.push(node);
+            curr = left;
+        }
+    }
+
     pub fn inorder_traversal(_root: Node) -> Vec<i32> {
         // TODO: implement inorder traversal.
         Vec::new()
