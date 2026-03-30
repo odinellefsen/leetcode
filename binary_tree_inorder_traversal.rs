@@ -48,6 +48,9 @@ impl Solution {
             result.push(node.borrow().val);
             let _right = Self::right_child(&node);
         }
+        if !stack.is_empty() {
+            Self::process_next(&mut stack, &mut result);
+        }
 
         // TODO: implement inorder traversal.
         result
