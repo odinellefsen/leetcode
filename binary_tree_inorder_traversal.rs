@@ -37,6 +37,8 @@ impl Solution {
     pub fn inorder_traversal(root: Node) -> Vec<i32> {
         let mut result: Vec<i32> = Vec::new();
         let mut stack: Vec<Rc<RefCell<TreeNode>>> = Vec::new();
+
+        // Incremental WIP: currently only confirms stack setup and first visit.
         Self::push_left_spine(root, &mut stack);
         if let Some(node) = stack.pop() {
             result.push(node.borrow().val);
