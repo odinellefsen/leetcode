@@ -30,7 +30,11 @@ impl Solution {
         }
     }
 
-    pub fn inorder_traversal(_root: Node) -> Vec<i32> {
+    pub fn inorder_traversal(root: Node) -> Vec<i32> {
+        let mut result: Vec<i32> = Vec::new();
+        let mut stack: Vec<Rc<RefCell<TreeNode>>> = Vec::new();
+        let _ = (&mut result, &mut stack, root);
+
         // TODO: implement inorder traversal.
         Vec::new()
     }
