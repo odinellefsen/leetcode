@@ -18,8 +18,11 @@
 // }
 use std::cell::RefCell;
 use std::rc::Rc;
+
+type Node = Option<Rc<RefCell<TreeNode>>>;
+
 impl Solution {
-    pub fn inorder_traversal(_root: Option<Rc<RefCell<TreeNode>>>) -> Vec<i32> {
+    pub fn inorder_traversal(_root: Node) -> Vec<i32> {
         // TODO: implement inorder traversal.
         Vec::new()
     }
