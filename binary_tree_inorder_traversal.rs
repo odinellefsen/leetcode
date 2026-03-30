@@ -40,6 +40,7 @@ impl Solution {
         Self::push_left_spine(root, &mut stack);
         if let Some(node) = stack.pop() {
             result.push(node.borrow().val);
+            let _right = Self::right_child(&node);
         }
 
         // TODO: implement inorder traversal.
