@@ -22,6 +22,10 @@ use std::rc::Rc;
 type Node = Option<Rc<RefCell<TreeNode>>>;
 
 impl Solution {
+    fn process_next(_stack: &mut Vec<Rc<RefCell<TreeNode>>>, _result: &mut Vec<i32>) {
+        // TODO: pop stack node, record value, then push right subtree left-spine.
+    }
+
     fn right_child(node: &Rc<RefCell<TreeNode>>) -> Node {
         node.borrow().right.clone()
     }
