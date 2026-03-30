@@ -22,6 +22,10 @@ use std::rc::Rc;
 type Node = Option<Rc<RefCell<TreeNode>>>;
 
 impl Solution {
+    fn right_child(node: &Rc<RefCell<TreeNode>>) -> Node {
+        node.borrow().right.clone()
+    }
+
     fn push_left_spine(mut curr: Node, stack: &mut Vec<Rc<RefCell<TreeNode>>>) {
         while let Some(node) = curr {
             let left = node.borrow().left.clone();
