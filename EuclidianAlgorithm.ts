@@ -20,9 +20,5 @@ function gcd(a: number, b: number): number {
 }
 
 //const d = gcd(1160718174, 316258250);
-try {
-    const d = gcd(1160718174, 0);
-    console.log(`The Greatest Common Divisior is: ${d}`);
-} catch(error) {
-    console.log(error.message)
-}
+const d = gcd(1160718174, 0);
+console.log(`The Greatest Common Divisior is: ${d}`);
