@@ -7,6 +7,9 @@ function gcd(a: number, b: number): number {
     
     if (remainder == 0) {
         return b;
+    } else {
+        a = b;
+        b = remainder;
     }
 
     return 0;
