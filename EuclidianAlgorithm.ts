@@ -12,6 +12,8 @@ function gcd(a: number, b: number): number {
         b = remainder;
     }
 
+    gcd(a, b);
+
     return 0;
 }
 
