@@ -1,5 +1,15 @@
-function gcd(a: number, b: number) {
+function gcd(a: number, b: number): number {
+    if (b > a) {
+        [a, b] = [b, a];
+    }
     const quotient = Math.floor(a / b);
     const remainder = a - (b * quotient);
-    console.log()
+    
+    if (remainder == 0) {
+        return b;
+    }
+
+    return 0;
 }
+
+gcd(3, 10);
