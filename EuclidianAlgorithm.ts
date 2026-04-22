@@ -3,7 +3,8 @@ function gcd(a: number, b: number): number {
         [a, b] = [b, a];
     }
     if (b === 0) {
-        throw new Error("I'm sorry Dave. I'm afraid I can't do that.");
+        const absolute_value_of_a = Math.abs(a)
+        return absolute_value_of_a;
         
     }
     const quotient = Math.floor(a / b);
