@@ -17,4 +17,5 @@ function gcd(a: number, b: number): number {
     return 0;
 }
 
-gcd(3, 10);
+const d = gcd(1160718174, 316258250);
+console.log(`The Greatest Common Divisior is: ${d}`);
