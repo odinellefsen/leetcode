@@ -20,5 +20,13 @@ function gcd(a: number, b: number): number {
 }
 
 //const d = gcd(1160718174, 316258250);
-const d = gcd(1160718174, 0);
-console.log(`The Greatest Common Divisior is: ${d}`);
+//const d = gcd(24140, 16762);
+//console.log(`The Greatest Common Divisior is: ${d}`);
+
+const a = 24140;
+const b = 16762;
+const quotient = Math.floor(a / b);
+const remainder = a - (b * quotient);
+console.log(`quotient: ${quotient}`);
+console.log(`remainder ${remainder}`);
+console.log(`dividend: ${quotient * b + remainder}`);
