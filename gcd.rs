@@ -9,6 +9,7 @@ impl Solution {
             return a;
         }
 
+        // Repeatedly replace the pair with divisor and remainder.
         while b != 0 {
             let remainder = a % b;
             a = b;
