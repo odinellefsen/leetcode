@@ -15,7 +15,7 @@ impl Solution {
             b = remainder;
         }
 
-        0
+        a
     }
 }
 
