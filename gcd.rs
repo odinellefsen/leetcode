@@ -19,4 +19,7 @@ impl Solution {
     }
 }
 
-fn main() {}
+fn main() {
+    let result = Solution::gcd(48, 18);
+    println!("{}", result);
+}
