@@ -9,6 +9,12 @@ impl Solution {
             return a;
         }
 
+        while b != 0 {
+            let remainder = a % b;
+            a = b;
+            b = remainder;
+        }
+
         0
     }
 }
