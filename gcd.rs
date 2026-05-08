@@ -22,4 +22,8 @@ impl Solution {
 fn main() {
     let result = Solution::gcd(48, 18);
     println!("{}", result);
+
+    assert_eq!(result, 6);
+    assert_eq!(Solution::gcd(54, 24), 6);
+    assert_eq!(Solution::gcd(-42, 56), 14);
 }
