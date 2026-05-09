@@ -3,19 +3,15 @@ use std::collections::HashMap;
 struct Solution;
 
 impl Solution {
-    /// Hash map: value → first index seen (two-pass variant).
+    /// Single pass: insert after checking so the same index is never reused.
     pub fn two_sum_with_map(nums: &[i32], target: i32) -> Vec<i32> {
         let mut map: HashMap<i32, usize> = HashMap::new();
         for (i, &n) in nums.iter().enumerate() {
-            map.insert(n, i);
-        }
-        for (i, &n) in nums.iter().enumerate() {
             let need = target - n;
             if let Some(&j) = map.get(&need) {
-                if i != j {
-                    return vec![i as i32, j as i32];
-                }
+                return vec![j as i32, i as i32];
             }
+            map.insert(n, i);
         }
         vec![]
     }
