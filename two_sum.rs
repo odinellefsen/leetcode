@@ -31,4 +31,6 @@ fn main() {
     assert_eq!(Solution::two_sum_with_map(&[2, 7, 11, 15], 9), vec![0, 1]);
     assert_eq!(Solution::two_sum_with_map(&[3, 2, 4], 6), vec![1, 2]);
     assert_eq!(Solution::two_sum_with_map(&[3, 3], 6), vec![0, 1]);
+    assert_eq!(Solution::two_sum(vec![-1, -2, -4, -5], -6), vec![1, 2]);
+    assert_eq!(Solution::two_sum_with_map(&[-1, -2, -4, -5], -6), vec![1, 2]);
 }
