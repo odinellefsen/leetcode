@@ -23,4 +23,5 @@ fn main() {
     assert_eq!(Solution::two_sum(vec![3, 2, 4], 6), vec![1, 2]);
     assert_eq!(Solution::two_sum(vec![3, 3], 6), vec![0, 1]);
     assert_eq!(Solution::two_sum(vec![-1, -2, -4, -5], -6), vec![1, 2]);
+    assert_eq!(Solution::two_sum(vec![0, 1], 1), vec![0, 1]);
 }
