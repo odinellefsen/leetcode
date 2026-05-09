@@ -1,11 +1,20 @@
 struct Solution;
 
 impl Solution {
-    pub fn two_sum(_nums: Vec<i32>, _target: i32) -> Vec<i32> {
-        unimplemented!("Two Sum — add an implementation")
+    pub fn two_sum(nums: Vec<i32>, target: i32) -> Vec<i32> {
+        for i in 0..nums.len() {
+            for j in (i + 1)..nums.len() {
+                if nums[i] + nums[j] == target {
+                    return vec![i as i32, j as i32];
+                }
+            }
+        }
+        vec![]
     }
 }
 
 fn main() {
-    println!("two_sum scaffold");
+    let idx = Solution::two_sum(vec![2, 7, 11, 15], 9);
+    println!("{:?}", idx);
+    assert_eq!(idx, vec![0, 1]);
 }
