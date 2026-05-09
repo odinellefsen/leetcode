@@ -5,7 +5,7 @@ struct Solution;
 impl Solution {
     /// Single pass: insert after checking so the same index is never reused.
     pub fn two_sum_with_map(nums: &[i32], target: i32) -> Vec<i32> {
-        let mut map: HashMap<i32, usize> = HashMap::new();
+        let mut map: HashMap<i32, usize> = HashMap::with_capacity(nums.len());
         for (i, &n) in nums.iter().enumerate() {
             let need = target - n;
             if let Some(&j) = map.get(&need) {
