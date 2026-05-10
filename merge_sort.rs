@@ -34,4 +34,7 @@ impl Solution {
     }
 }
 
-fn main() {}
+fn main() {
+    let sorted = Solution::merge_sort(vec![5, 2, 4, 6, 1, 3]);
+    println!("{:?}", sorted);
+}
