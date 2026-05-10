@@ -6,7 +6,13 @@ impl Solution {
             return nums;
         }
 
-        nums
+        let mid = nums.len() / 2;
+        let left = Self::merge_sort(nums[..mid].to_vec());
+        let right = Self::merge_sort(nums[mid..].to_vec());
+
+        let mut result = left;
+        result.extend(right);
+        result
     }
 }
 
