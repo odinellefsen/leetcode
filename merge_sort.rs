@@ -28,6 +28,8 @@ impl Solution {
             }
         }
 
+        result.extend_from_slice(&left[i..]);
+        result.extend_from_slice(&right[j..]);
         result
     }
 }
