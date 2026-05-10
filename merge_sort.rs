@@ -15,8 +15,19 @@ impl Solution {
 
     fn merge(left: Vec<i32>, right: Vec<i32>) -> Vec<i32> {
         let mut result = Vec::with_capacity(left.len() + right.len());
-        result.extend(left);
-        result.extend(right);
+        let mut i = 0;
+        let mut j = 0;
+
+        while i < left.len() && j < right.len() {
+            if left[i] <= right[j] {
+                result.push(left[i]);
+                i += 1;
+            } else {
+                result.push(right[j]);
+                j += 1;
+            }
+        }
+
         result
     }
 }
