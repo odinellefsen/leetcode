@@ -10,7 +10,12 @@ impl Solution {
         let left = Self::merge_sort(nums[..mid].to_vec());
         let right = Self::merge_sort(nums[mid..].to_vec());
 
-        let mut result = left;
+        Self::merge(left, right)
+    }
+
+    fn merge(left: Vec<i32>, right: Vec<i32>) -> Vec<i32> {
+        let mut result = Vec::with_capacity(left.len() + right.len());
+        result.extend(left);
         result.extend(right);
         result
     }
