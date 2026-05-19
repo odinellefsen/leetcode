@@ -6,9 +6,31 @@ pub struct FeistelCipher {
 }
 
 impl FeistelCipher {
-    pub fn new(_key: [u8; 16]) -> Self {
-        Self { subkeys: [0u32; ROUNDS] }
+    pub fn new(key: [u8; 16]) -> Self {
+        Self { subkeys: derive_subkeys(key) }
     }
+}
+
+// Derive ROUNDS 32-bit subkeys from a 128-bit master key.
+//
+// The 128-bit key is split into four 32-bit words k0..k3. Successive
+// subkeys are produced by rotating the previous one and XORing in a
+// round-dependent constant, giving every round a distinct key material.
+fn derive_subkeys(key: [u8; 16]) -> [u32; ROUNDS] {
+    let k: [u32; 4] = std::array::from_fn(|i| {
+        u32::from_be_bytes(key[i * 4..i * 4 + 4].try_into().unwrap())
+    });
+
+    let mut subkeys = [0u32; ROUNDS];
+    for i in 0..ROUNDS {
+        let base = k[i % 4];
+        let prev = if i == 0 { 0 } else { subkeys[i - 1] };
+        subkeys[i] = base
+            .rotate_left((i as u32 * 3 + 5) % 32)
+            ^ prev
+            ^ (i as u32).wrapping_mul(0x9e3779b9);
+    }
+    subkeys
 }
 
 // Split an 8-byte block into two 32-bit halves (big-endian).
