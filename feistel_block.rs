@@ -1,3 +1,5 @@
+// terminal: rustc --edition 2021 feistel_block.rs -o feistel_block && ./feistel_block
+
 //! Simple Feistel block cipher.
 //!
 //! ## Design
@@ -37,7 +39,9 @@ pub struct FeistelCipher {
 
 impl FeistelCipher {
     pub fn new(key: [u8; 16]) -> Self {
-        Self { subkeys: derive_subkeys(key) }
+        Self {
+            subkeys: derive_subkeys(key),
+        }
     }
 
     // Encrypt a single 64-bit block.
@@ -77,18 +81,15 @@ impl FeistelCipher {
 // subkeys are produced by rotating the previous one and XORing in a
 // round-dependent constant, giving every round a distinct key material.
 fn derive_subkeys(key: [u8; 16]) -> [u32; ROUNDS] {
-    let k: [u32; 4] = std::array::from_fn(|i| {
-        u32::from_be_bytes(key[i * 4..i * 4 + 4].try_into().unwrap())
-    });
+    let k: [u32; 4] =
+        std::array::from_fn(|i| u32::from_be_bytes(key[i * 4..i * 4 + 4].try_into().unwrap()));
 
     let mut subkeys = [0u32; ROUNDS];
     for i in 0..ROUNDS {
         let base = k[i % 4];
         let prev = if i == 0 { 0 } else { subkeys[i - 1] };
-        subkeys[i] = base
-            .rotate_left((i as u32 * 3 + 5) % 32)
-            ^ prev
-            ^ (i as u32).wrapping_mul(0x9e3779b9);
+        subkeys[i] =
+            base.rotate_left((i as u32 * 3 + 5) % 32) ^ prev ^ (i as u32).wrapping_mul(0x9e3779b9);
     }
     subkeys
 }
@@ -98,9 +99,7 @@ fn derive_subkeys(key: [u8; 16]) -> [u32; ROUNDS] {
 pub fn encrypt_ecb(cipher: &FeistelCipher, data: &[u8]) -> Vec<u8> {
     pkcs7_pad(data)
         .chunks(BLOCK_SIZE)
-        .flat_map(|chunk| {
-            cipher.encrypt_block(chunk.try_into().unwrap())
-        })
+        .flat_map(|chunk| cipher.encrypt_block(chunk.try_into().unwrap()))
         .collect()
 }
 
@@ -110,9 +109,7 @@ pub fn decrypt_ecb(cipher: &FeistelCipher, data: &[u8]) -> Result<Vec<u8>, &'sta
     }
     let raw: Vec<u8> = data
         .chunks(BLOCK_SIZE)
-        .flat_map(|chunk| {
-            cipher.decrypt_block(chunk.try_into().unwrap())
-        })
+        .flat_map(|chunk| cipher.decrypt_block(chunk.try_into().unwrap()))
         .collect();
     pkcs7_unpad(&raw)
 }
@@ -175,20 +172,28 @@ fn merge_halves(l: u32, r: u32) -> [u8; 8] {
 
 fn main() {
     let key: [u8; 16] = [
-        0x00, 0x01, 0x02, 0x03, 0x04, 0x05, 0x06, 0x07,
-        0x08, 0x09, 0x0a, 0x0b, 0x0c, 0x0d, 0x0e, 0x0f,
+        0x00, 0x01, 0x02, 0x03, 0x04, 0x05, 0x06, 0x07, 0x08, 0x09, 0x0a, 0x0b, 0x0c, 0x0d, 0x0e,
+        0x0f,
     ];
     let cipher = FeistelCipher::new(key);
 
     // ── single block ──────────────────────────────────────────────────────────
     let plaintext_block: [u8; 8] = *b"Feistel!";
     let ciphertext_block = cipher.encrypt_block(plaintext_block);
-    let recovered_block  = cipher.decrypt_block(ciphertext_block);
+    let recovered_block = cipher.decrypt_block(ciphertext_block);
 
     println!("=== Single block ===");
-    println!("Plaintext : {:?}  (\"{}\")", plaintext_block, std::str::from_utf8(&plaintext_block).unwrap());
+    println!(
+        "Plaintext : {:?}  (\"{}\")",
+        plaintext_block,
+        std::str::from_utf8(&plaintext_block).unwrap()
+    );
     println!("Ciphertext: {:?}", ciphertext_block);
-    println!("Recovered : {:?}  (\"{}\")", recovered_block, std::str::from_utf8(&recovered_block).unwrap());
+    println!(
+        "Recovered : {:?}  (\"{}\")",
+        recovered_block,
+        std::str::from_utf8(&recovered_block).unwrap()
+    );
 
     // ── multi-block ECB ───────────────────────────────────────────────────────
     let message = b"Hello from the Feistel cipher!";
@@ -197,8 +202,17 @@ fn main() {
 
     println!("\n=== ECB mode ===");
     println!("Message  : \"{}\"", std::str::from_utf8(message).unwrap());
-    println!("Encrypted: {}", encrypted.iter().map(|b| format!("{:02x}", b)).collect::<String>());
-    println!("Decrypted: \"{}\"", std::str::from_utf8(&decrypted).unwrap());
+    println!(
+        "Encrypted: {}",
+        encrypted
+            .iter()
+            .map(|b| format!("{:02x}", b))
+            .collect::<String>()
+    );
+    println!(
+        "Decrypted: \"{}\"",
+        std::str::from_utf8(&decrypted).unwrap()
+    );
 
     // ── bit-flip sensitivity (avalanche) ─────────────────────────────────────
     let block_a: [u8; 8] = [0u8; 8];
@@ -207,7 +221,9 @@ fn main() {
 
     let ct_a = cipher.encrypt_block(block_a);
     let ct_b = cipher.encrypt_block(block_b);
-    let differing_bits: u32 = ct_a.iter().zip(ct_b.iter())
+    let differing_bits: u32 = ct_a
+        .iter()
+        .zip(ct_b.iter())
         .map(|(a, b)| (a ^ b).count_ones())
         .sum();
 
@@ -222,15 +238,18 @@ mod tests {
     use super::*;
 
     const KEY: [u8; 16] = [
-        0x00, 0x01, 0x02, 0x03, 0x04, 0x05, 0x06, 0x07,
-        0x08, 0x09, 0x0a, 0x0b, 0x0c, 0x0d, 0x0e, 0x0f,
+        0x00, 0x01, 0x02, 0x03, 0x04, 0x05, 0x06, 0x07, 0x08, 0x09, 0x0a, 0x0b, 0x0c, 0x0d, 0x0e,
+        0x0f,
     ];
 
     #[test]
     fn block_round_trip() {
         let cipher = FeistelCipher::new(KEY);
         let plaintext = [0xde, 0xad, 0xbe, 0xef, 0xca, 0xfe, 0xba, 0xbe];
-        assert_eq!(cipher.decrypt_block(cipher.encrypt_block(plaintext)), plaintext);
+        assert_eq!(
+            cipher.decrypt_block(cipher.encrypt_block(plaintext)),
+            plaintext
+        );
     }
 
     #[test]
