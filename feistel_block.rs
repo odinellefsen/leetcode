@@ -142,3 +142,66 @@ fn merge_halves(l: u32, r: u32) -> [u8; 8] {
     block[4..8].copy_from_slice(&r.to_be_bytes());
     block
 }
+
+#[cfg(test)]
+mod tests {
+    use super::*;
+
+    const KEY: [u8; 16] = [
+        0x00, 0x01, 0x02, 0x03, 0x04, 0x05, 0x06, 0x07,
+        0x08, 0x09, 0x0a, 0x0b, 0x0c, 0x0d, 0x0e, 0x0f,
+    ];
+
+    #[test]
+    fn block_round_trip() {
+        let cipher = FeistelCipher::new(KEY);
+        let plaintext = [0xde, 0xad, 0xbe, 0xef, 0xca, 0xfe, 0xba, 0xbe];
+        assert_eq!(cipher.decrypt_block(cipher.encrypt_block(plaintext)), plaintext);
+    }
+
+    #[test]
+    fn all_zero_block() {
+        let cipher = FeistelCipher::new(KEY);
+        let block = [0u8; 8];
+        assert_eq!(cipher.decrypt_block(cipher.encrypt_block(block)), block);
+    }
+
+    #[test]
+    fn all_ones_block() {
+        let cipher = FeistelCipher::new(KEY);
+        let block = [0xffu8; 8];
+        assert_eq!(cipher.decrypt_block(cipher.encrypt_block(block)), block);
+    }
+
+    #[test]
+    fn ecb_round_trip_aligned() {
+        let cipher = FeistelCipher::new(KEY);
+        let msg = b"ABCDEFGH"; // exactly one block
+        let ct = encrypt_ecb(&cipher, msg);
+        assert_eq!(decrypt_ecb(&cipher, &ct).unwrap(), msg);
+    }
+
+    #[test]
+    fn ecb_round_trip_unaligned() {
+        let cipher = FeistelCipher::new(KEY);
+        let msg = b"Hello, Feistel!";
+        let ct = encrypt_ecb(&cipher, msg);
+        assert_eq!(decrypt_ecb(&cipher, &ct).unwrap(), msg);
+    }
+
+    #[test]
+    fn different_keys_differ() {
+        let key2 = [0xffu8; 16];
+        let c1 = FeistelCipher::new(KEY);
+        let c2 = FeistelCipher::new(key2);
+        let block = [0u8; 8];
+        assert_ne!(c1.encrypt_block(block), c2.encrypt_block(block));
+    }
+
+    #[test]
+    fn ciphertext_differs_from_plaintext() {
+        let cipher = FeistelCipher::new(KEY);
+        let block = [0x11u8; 8];
+        assert_ne!(cipher.encrypt_block(block), block);
+    }
+}
