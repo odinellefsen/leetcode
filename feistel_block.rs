@@ -24,6 +24,21 @@ impl FeistelCipher {
         }
         merge_halves(l, r)
     }
+
+    // Decrypt a single 64-bit block.
+    //
+    // Because F never needs to be invertible, decryption is identical to
+    // encryption — just apply the subkeys in reverse order. This is the
+    // elegant property that makes the Feistel construction so appealing.
+    pub fn decrypt_block(&self, block: [u8; 8]) -> [u8; 8] {
+        let (mut l, mut r) = split_block(block);
+        for i in (0..ROUNDS).rev() {
+            let new_l = r ^ round_fn(l, self.subkeys[i]);
+            r = l;
+            l = new_l;
+        }
+        merge_halves(l, r)
+    }
 }
 
 // Derive ROUNDS 32-bit subkeys from a 128-bit master key.
