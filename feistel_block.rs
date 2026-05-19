@@ -33,6 +33,24 @@ fn derive_subkeys(key: [u8; 16]) -> [u32; ROUNDS] {
     subkeys
 }
 
+// The round function F — the only cipher-specific component.
+//
+// Everything around F (split, XOR, swap, merge) is identical in every
+// Feistel cipher; only F differentiates one design from another.
+//
+// This F is an ARX (Add-Rotate-XOR) mixing function:
+//   1. Key whitening: XOR the half with the subkey.
+//   2. Multiply by a near-golden-ratio constant to diffuse every bit.
+//   3. Fold the high bits back in to break linearity.
+//   4. A second multiply + fold for full avalanche.
+fn round_fn(half: u32, subkey: u32) -> u32 {
+    let x = half ^ subkey;
+    let x = x.wrapping_mul(0x9e3779b9); // near-golden-ratio constant
+    let x = x ^ (x >> 16);
+    let x = x.wrapping_mul(0x85ebca6b);
+    x ^ (x >> 13)
+}
+
 // Split an 8-byte block into two 32-bit halves (big-endian).
 fn split_block(block: [u8; 8]) -> (u32, u32) {
     let l = u32::from_be_bytes(block[0..4].try_into().unwrap());
