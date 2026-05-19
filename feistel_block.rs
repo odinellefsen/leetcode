@@ -63,6 +63,30 @@ fn derive_subkeys(key: [u8; 16]) -> [u32; ROUNDS] {
     subkeys
 }
 
+// ECB (Electronic Code Book) mode: each block encrypted independently.
+// Suitable for demonstration; not semantically secure for real use.
+pub fn encrypt_ecb(cipher: &FeistelCipher, data: &[u8]) -> Vec<u8> {
+    pkcs7_pad(data)
+        .chunks(BLOCK_SIZE)
+        .flat_map(|chunk| {
+            cipher.encrypt_block(chunk.try_into().unwrap())
+        })
+        .collect()
+}
+
+pub fn decrypt_ecb(cipher: &FeistelCipher, data: &[u8]) -> Result<Vec<u8>, &'static str> {
+    if data.len() % BLOCK_SIZE != 0 {
+        return Err("ciphertext length not a multiple of block size");
+    }
+    let raw: Vec<u8> = data
+        .chunks(BLOCK_SIZE)
+        .flat_map(|chunk| {
+            cipher.decrypt_block(chunk.try_into().unwrap())
+        })
+        .collect();
+    pkcs7_unpad(&raw)
+}
+
 // PKCS#7 padding: append N bytes each with value N so the total length
 // is a multiple of BLOCK_SIZE. When the input is already aligned a full
 // block of padding is added so unpadding is always unambiguous.
