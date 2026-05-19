@@ -63,6 +63,29 @@ fn derive_subkeys(key: [u8; 16]) -> [u32; ROUNDS] {
     subkeys
 }
 
+// PKCS#7 padding: append N bytes each with value N so the total length
+// is a multiple of BLOCK_SIZE. When the input is already aligned a full
+// block of padding is added so unpadding is always unambiguous.
+fn pkcs7_pad(data: &[u8]) -> Vec<u8> {
+    let pad_len = BLOCK_SIZE - (data.len() % BLOCK_SIZE);
+    let mut padded = data.to_vec();
+    padded.extend(std::iter::repeat(pad_len as u8).take(pad_len));
+    padded
+}
+
+fn pkcs7_unpad(data: &[u8]) -> Result<Vec<u8>, &'static str> {
+    let &pad_byte = data.last().ok_or("empty ciphertext")?;
+    let pad_len = pad_byte as usize;
+    if pad_len == 0 || pad_len > BLOCK_SIZE {
+        return Err("invalid padding");
+    }
+    let payload_len = data.len().checked_sub(pad_len).ok_or("invalid padding")?;
+    if data[payload_len..].iter().any(|&b| b != pad_byte) {
+        return Err("invalid padding");
+    }
+    Ok(data[..payload_len].to_vec())
+}
+
 // The round function F — the only cipher-specific component.
 //
 // Everything around F (split, XOR, swap, merge) is identical in every
