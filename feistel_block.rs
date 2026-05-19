@@ -9,6 +9,21 @@ impl FeistelCipher {
     pub fn new(key: [u8; 16]) -> Self {
         Self { subkeys: derive_subkeys(key) }
     }
+
+    // Encrypt a single 64-bit block.
+    //
+    // Standard Feistel network with ROUNDS rounds:
+    //   each round applies F to the right half and XORs the result into
+    //   the left half, then swaps the halves.
+    pub fn encrypt_block(&self, block: [u8; 8]) -> [u8; 8] {
+        let (mut l, mut r) = split_block(block);
+        for i in 0..ROUNDS {
+            let new_r = l ^ round_fn(r, self.subkeys[i]);
+            l = r;
+            r = new_r;
+        }
+        merge_halves(l, r)
+    }
 }
 
 // Derive ROUNDS 32-bit subkeys from a 128-bit master key.
