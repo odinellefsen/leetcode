@@ -1,3 +1,33 @@
+//! Simple Feistel block cipher.
+//!
+//! ## Design
+//!
+//! | Parameter  | Value                        |
+//! |------------|------------------------------|
+//! | Block size | 64 bits (two 32-bit halves)  |
+//! | Key size   | 128 bits                     |
+//! | Rounds     | 16                           |
+//! | Mode       | ECB (demo only)              |
+//!
+//! A Feistel network is a symmetric structure that converts any function `F`
+//! into an invertible permutation without requiring `F` itself to be
+//! invertible. Each round:
+//!
+//! ```text
+//!   L_i+1 = R_i
+//!   R_i+1 = L_i  ⊕  F(R_i, K_i)
+//! ```
+//!
+//! Decryption reuses the exact same network with subkeys in reverse order —
+//! `F` is never inverted. This is the defining elegance of the construction.
+//!
+//! ## Round function (`F`)
+//!
+//! `F` is the **only** cipher-specific piece. Everything else — the split,
+//! the XOR, the swap, the merge — is generic Feistel boilerplate. This
+//! implementation uses an ARX (Add-Rotate-XOR / multiply-XOR) mixer drawn
+//! from Murmur/Xorshift lineage for fast, well-tested avalanche behaviour.
+
 pub const ROUNDS: usize = 16;
 pub const BLOCK_SIZE: usize = 8; // bytes (64-bit block)
 
