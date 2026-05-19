@@ -173,6 +173,50 @@ fn merge_halves(l: u32, r: u32) -> [u8; 8] {
     block
 }
 
+fn main() {
+    let key: [u8; 16] = [
+        0x00, 0x01, 0x02, 0x03, 0x04, 0x05, 0x06, 0x07,
+        0x08, 0x09, 0x0a, 0x0b, 0x0c, 0x0d, 0x0e, 0x0f,
+    ];
+    let cipher = FeistelCipher::new(key);
+
+    // ── single block ──────────────────────────────────────────────────────────
+    let plaintext_block: [u8; 8] = *b"Feistel!";
+    let ciphertext_block = cipher.encrypt_block(plaintext_block);
+    let recovered_block  = cipher.decrypt_block(ciphertext_block);
+
+    println!("=== Single block ===");
+    println!("Plaintext : {:?}  (\"{}\")", plaintext_block, std::str::from_utf8(&plaintext_block).unwrap());
+    println!("Ciphertext: {:?}", ciphertext_block);
+    println!("Recovered : {:?}  (\"{}\")", recovered_block, std::str::from_utf8(&recovered_block).unwrap());
+
+    // ── multi-block ECB ───────────────────────────────────────────────────────
+    let message = b"Hello from the Feistel cipher!";
+    let encrypted = encrypt_ecb(&cipher, message);
+    let decrypted = decrypt_ecb(&cipher, &encrypted).unwrap();
+
+    println!("\n=== ECB mode ===");
+    println!("Message  : \"{}\"", std::str::from_utf8(message).unwrap());
+    println!("Encrypted: {}", encrypted.iter().map(|b| format!("{:02x}", b)).collect::<String>());
+    println!("Decrypted: \"{}\"", std::str::from_utf8(&decrypted).unwrap());
+
+    // ── bit-flip sensitivity (avalanche) ─────────────────────────────────────
+    let block_a: [u8; 8] = [0u8; 8];
+    let mut block_b = block_a;
+    block_b[0] ^= 0x01; // flip one bit
+
+    let ct_a = cipher.encrypt_block(block_a);
+    let ct_b = cipher.encrypt_block(block_b);
+    let differing_bits: u32 = ct_a.iter().zip(ct_b.iter())
+        .map(|(a, b)| (a ^ b).count_ones())
+        .sum();
+
+    println!("\n=== Avalanche (1-bit input flip) ===");
+    println!("CT_a: {:?}", ct_a);
+    println!("CT_b: {:?}", ct_b);
+    println!("Bits flipped in ciphertext: {}/64", differing_bits);
+}
+
 #[cfg(test)]
 mod tests {
     use super::*;
