@@ -41,6 +41,30 @@ export class FeistelCipher {
   }
 }
 
+// ECB (Electronic Code Book) mode: each block encrypted independently.
+// Suitable for demonstration; not semantically secure for real use.
+export function encryptEcb(cipher: FeistelCipher, data: Uint8Array): Uint8Array {
+  const padded = pkcs7Pad(data);
+  const out = new Uint8Array(padded.length);
+  for (let offset = 0; offset < padded.length; offset += BLOCK_SIZE) {
+    const block = padded.slice(offset, offset + BLOCK_SIZE);
+    out.set(cipher.encryptBlock(block), offset);
+  }
+  return out;
+}
+
+export function decryptEcb(cipher: FeistelCipher, data: Uint8Array): Uint8Array {
+  if (data.length % BLOCK_SIZE !== 0) {
+    throw new Error("ciphertext length not a multiple of block size");
+  }
+  const raw = new Uint8Array(data.length);
+  for (let offset = 0; offset < data.length; offset += BLOCK_SIZE) {
+    const block = data.slice(offset, offset + BLOCK_SIZE);
+    raw.set(cipher.decryptBlock(block), offset);
+  }
+  return pkcs7Unpad(raw);
+}
+
 // Derive ROUNDS 32-bit subkeys from a 64-bit master key.
 //
 // The 64-bit key is split into two 32-bit words k0 and k1. A rotating
