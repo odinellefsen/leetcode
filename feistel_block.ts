@@ -179,3 +179,66 @@ function pkcs7Unpad(data: Uint8Array): Uint8Array {
   }
   return data.slice(0, payloadLen);
 }
+
+function bytesEqual(a: Uint8Array, b: Uint8Array): boolean {
+  return a.length === b.length && a.every((byte, i) => byte === b[i]);
+}
+
+function assert(condition: boolean, message: string): void {
+  if (!condition) {
+    throw new Error(message);
+  }
+}
+
+export function runTests(): void {
+  const key = new Uint8Array([
+    0x00, 0x01, 0x02, 0x03, 0x04, 0x05, 0x06, 0x07,
+  ]);
+  const cipher = new FeistelCipher(key);
+
+  const plaintext = new Uint8Array([
+    0xde, 0xad, 0xbe, 0xef, 0xca, 0xfe, 0xba, 0xbe,
+  ]);
+  assert(
+    bytesEqual(cipher.decryptBlock(cipher.encryptBlock(plaintext)), plaintext),
+    "block round-trip",
+  );
+
+  const zeroBlock = new Uint8Array(BLOCK_SIZE);
+  assert(
+    bytesEqual(cipher.decryptBlock(cipher.encryptBlock(zeroBlock)), zeroBlock),
+    "all-zero block",
+  );
+
+  const onesBlock = new Uint8Array(BLOCK_SIZE).fill(0xff);
+  assert(
+    bytesEqual(cipher.decryptBlock(cipher.encryptBlock(onesBlock)), onesBlock),
+    "all-ones block",
+  );
+
+  const aligned = new TextEncoder().encode("ABCDEFGH");
+  const ctAligned = encryptEcb(cipher, aligned);
+  assert(bytesEqual(decryptEcb(cipher, ctAligned), aligned), "ecb aligned");
+
+  const unaligned = new TextEncoder().encode("Hello, Feistel!");
+  const ctUnaligned = encryptEcb(cipher, unaligned);
+  assert(
+    bytesEqual(decryptEcb(cipher, ctUnaligned), unaligned),
+    "ecb unaligned",
+  );
+
+  const key2 = new Uint8Array(KEY_SIZE).fill(0xff);
+  const cipher2 = new FeistelCipher(key2);
+  assert(
+    !bytesEqual(cipher.encryptBlock(zeroBlock), cipher2.encryptBlock(zeroBlock)),
+    "different keys differ",
+  );
+
+  const block = new Uint8Array(BLOCK_SIZE).fill(0x11);
+  assert(
+    !bytesEqual(cipher.encryptBlock(block), block),
+    "ciphertext differs from plaintext",
+  );
+}
+
+runTests();
