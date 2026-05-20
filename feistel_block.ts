@@ -5,9 +5,30 @@ export const KEY_SIZE = 8; // bytes (64-bit key)
 export class FeistelCipher {
   private subkeys: Uint32Array;
 
-  constructor(_key: Uint8Array) {
-    this.subkeys = new Uint32Array(ROUNDS);
+  constructor(key: Uint8Array) {
+    if (key.length !== KEY_SIZE) {
+      throw new Error(`key must be ${KEY_SIZE} bytes`);
+    }
+    this.subkeys = deriveSubkeys(key);
   }
+}
+
+// Derive ROUNDS 32-bit subkeys from a 64-bit master key.
+//
+// The 64-bit key is split into two 32-bit words k0 and k1. A rotating
+// state register is mixed with both words and a round constant to
+// produce a distinct subkey for every round.
+function deriveSubkeys(key: Uint8Array): Uint32Array {
+  const k0 = readU32BE(key, 0);
+  const k1 = readU32BE(key, 4);
+  const subkeys = new Uint32Array(ROUNDS);
+  let state = (k0 ^ k1) >>> 0;
+
+  for (let i = 0; i < ROUNDS; i++) {
+    state = ((state << 7) | (state >>> 25)) >>> 0;
+    subkeys[i] = (k0 ^ k1 ^ state ^ (i * 0x6c078965)) >>> 0;
+  }
+  return subkeys;
 }
 
 function readU32BE(bytes: Uint8Array, offset: number): number {
