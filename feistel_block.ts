@@ -11,6 +11,21 @@ export class FeistelCipher {
     }
     this.subkeys = deriveSubkeys(key);
   }
+
+  // Encrypt a single 64-bit block.
+  //
+  // Standard Feistel network with ROUNDS rounds:
+  //   each round applies F to the right half and XORs the result into
+  //   the left half, then swaps the halves.
+  encryptBlock(block: Uint8Array): Uint8Array {
+    let [l, r] = splitBlock(block);
+    for (let i = 0; i < ROUNDS; i++) {
+      const newR = (l ^ roundFn(r, this.subkeys[i])) >>> 0;
+      l = r;
+      r = newR;
+    }
+    return mergeHalves(l, r);
+  }
 }
 
 // Derive ROUNDS 32-bit subkeys from a 64-bit master key.
