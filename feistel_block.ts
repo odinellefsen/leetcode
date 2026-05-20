@@ -1,3 +1,32 @@
+/**
+ * Simple Feistel block cipher (TypeScript).
+ *
+ * ## Design
+ *
+ * | Parameter  | Value                        |
+ * |------------|------------------------------|
+ * | Block size | 64 bits (two 32-bit halves)  |
+ * | Key size   | 64 bits                      |
+ * | Rounds     | 16                           |
+ * | Mode       | ECB (demo only)              |
+ *
+ * Each round of a Feistel network:
+ *
+ * ```
+ *   L_i+1 = R_i
+ *   R_i+1 = L_i  XOR  F(R_i, K_i)
+ * ```
+ *
+ * Decryption reuses the same network with subkeys in reverse order — F is
+ * never inverted.
+ *
+ * ## Round function (F)
+ *
+ * F is the only cipher-specific piece. This implementation uses byte-wise
+ * S-box substitution plus rotation and subkey XOR — a non-linear alternative
+ * to the ARX multiply-mix round function in the Rust version.
+ */
+
 export const ROUNDS = 16;
 export const BLOCK_SIZE = 8; // bytes (64-bit block)
 export const KEY_SIZE = 8; // bytes (64-bit key)
