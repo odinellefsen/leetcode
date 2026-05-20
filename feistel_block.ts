@@ -26,6 +26,19 @@ export class FeistelCipher {
     }
     return mergeHalves(l, r);
   }
+
+  // Decrypt a single 64-bit block.
+  //
+  // F never needs to be invertible — apply subkeys in reverse order.
+  decryptBlock(block: Uint8Array): Uint8Array {
+    let [l, r] = splitBlock(block);
+    for (let i = ROUNDS - 1; i >= 0; i--) {
+      const newL = (r ^ roundFn(l, this.subkeys[i])) >>> 0;
+      r = l;
+      l = newL;
+    }
+    return mergeHalves(l, r);
+  }
 }
 
 // Derive ROUNDS 32-bit subkeys from a 64-bit master key.
