@@ -123,3 +123,35 @@ function mergeHalves(l: number, r: number): Uint8Array {
   writeU32BE(r, block, 4);
   return block;
 }
+
+// PKCS#7 padding: append N bytes each with value N so the total length
+// is a multiple of BLOCK_SIZE. When the input is already aligned a full
+// block of padding is added so unpadding is always unambiguous.
+function pkcs7Pad(data: Uint8Array): Uint8Array {
+  const padLen = BLOCK_SIZE - (data.length % BLOCK_SIZE);
+  const padded = new Uint8Array(data.length + padLen);
+  padded.set(data);
+  padded.fill(padLen, data.length);
+  return padded;
+}
+
+function pkcs7Unpad(data: Uint8Array): Uint8Array {
+  if (data.length === 0) {
+    throw new Error("empty ciphertext");
+  }
+  const padByte = data[data.length - 1];
+  const padLen = padByte;
+  if (padLen === 0 || padLen > BLOCK_SIZE) {
+    throw new Error("invalid padding");
+  }
+  const payloadLen = data.length - padLen;
+  if (payloadLen < 0) {
+    throw new Error("invalid padding");
+  }
+  for (let i = payloadLen; i < data.length; i++) {
+    if (data[i] !== padByte) {
+      throw new Error("invalid padding");
+    }
+  }
+  return data.slice(0, payloadLen);
+}
