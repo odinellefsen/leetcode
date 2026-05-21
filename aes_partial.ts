@@ -11,6 +11,7 @@ export const KEY_SIZE_128 = 16;
 export const AES_128_ROUNDS = 10;
 export const WORD_SIZE = 4;
 export const EXPANDED_KEY_SIZE_128 = BLOCK_SIZE * (AES_128_ROUNDS + 1);
+export const PARTIAL_AES_ROUNDS = 3;
 
 export type AesBlock = Uint8Array;
 export type AesKey128 = Uint8Array;
@@ -211,6 +212,36 @@ export function roundKey(expandedKey: Uint8Array, round: number): Uint8Array {
 
 export function aesForwardRound(state: Uint8Array, keyForRound: Uint8Array): Uint8Array {
   return addRoundKey(mixColumns(shiftRows(subBytes(state))), keyForRound);
+}
+
+export function encryptPartialBlock(
+  block: Uint8Array,
+  key: Uint8Array,
+  rounds = PARTIAL_AES_ROUNDS,
+): Uint8Array {
+  assertBlock(block);
+  assertKey128(key);
+  assertPartialRoundCount(rounds);
+
+  const expandedKey = expandKey128(key);
+  let state = addRoundKey(block, roundKey(expandedKey, 0));
+
+  for (let round = 1; round <= rounds; round++) {
+    state = aesForwardRound(state, roundKey(expandedKey, round));
+  }
+
+  return state;
+}
+
+export function implementedAes128Fraction(rounds = PARTIAL_AES_ROUNDS): number {
+  assertPartialRoundCount(rounds);
+  return rounds / AES_128_ROUNDS;
+}
+
+function assertPartialRoundCount(rounds: number): void {
+  if (!Number.isInteger(rounds) || rounds < 1 || rounds >= AES_128_ROUNDS) {
+    throw new Error(`partial rounds must be an integer from 1 to ${AES_128_ROUNDS - 1}`);
+  }
 }
 
 function assertLength(label: string, bytes: Uint8Array, expected: number): void {
