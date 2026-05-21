@@ -90,6 +90,23 @@ export function subBytes(state: Uint8Array): Uint8Array {
   return out;
 }
 
+export function stateIndex(row: number, column: number): number {
+  if (row < 0 || row > 3 || column < 0 || column > 3) {
+    throw new Error("AES state coordinates must be between 0 and 3");
+  }
+  return column * 4 + row;
+}
+
+export function addRoundKey(state: Uint8Array, roundKey: Uint8Array): Uint8Array {
+  assertBlock(state);
+  assertBlock(roundKey);
+  const out = new Uint8Array(BLOCK_SIZE);
+  for (let i = 0; i < BLOCK_SIZE; i++) {
+    out[i] = state[i] ^ roundKey[i];
+  }
+  return out;
+}
+
 function assertLength(label: string, bytes: Uint8Array, expected: number): void {
   if (bytes.length !== expected) {
     throw new Error(`${label} must be ${expected} bytes`);
