@@ -10,6 +10,7 @@ export const BLOCK_SIZE = 16;
 export const KEY_SIZE_128 = 16;
 export const AES_128_ROUNDS = 10;
 export const WORD_SIZE = 4;
+export const EXPANDED_KEY_SIZE_128 = BLOCK_SIZE * (AES_128_ROUNDS + 1);
 
 export type AesBlock = Uint8Array;
 export type AesKey128 = Uint8Array;
@@ -171,6 +172,32 @@ export function xorWords(left: Uint8Array, right: Uint8Array): Uint8Array {
     left[2] ^ right[2],
     left[3] ^ right[3],
   ]);
+}
+
+export function expandKey128(key: Uint8Array): Uint8Array {
+  assertKey128(key);
+  const expanded = new Uint8Array(EXPANDED_KEY_SIZE_128);
+  expanded.set(key);
+
+  let bytesGenerated = KEY_SIZE_128;
+  let rconIndex = 1;
+
+  while (bytesGenerated < EXPANDED_KEY_SIZE_128) {
+    let temp = expanded.slice(bytesGenerated - WORD_SIZE, bytesGenerated);
+
+    if (bytesGenerated % KEY_SIZE_128 === 0) {
+      temp = subWord(rotWord(temp));
+      temp[0] ^= RCON[rconIndex++];
+    }
+
+    for (let i = 0; i < WORD_SIZE; i++) {
+      expanded[bytesGenerated] =
+        expanded[bytesGenerated - KEY_SIZE_128] ^ temp[i];
+      bytesGenerated++;
+    }
+  }
+
+  return expanded;
 }
 
 function assertLength(label: string, bytes: Uint8Array, expected: number): void {
