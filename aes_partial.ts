@@ -9,6 +9,7 @@
 export const BLOCK_SIZE = 16;
 export const KEY_SIZE_128 = 16;
 export const AES_128_ROUNDS = 10;
+export const WORD_SIZE = 4;
 
 export type AesBlock = Uint8Array;
 export type AesKey128 = Uint8Array;
@@ -139,6 +140,37 @@ export function mixColumns(state: Uint8Array): Uint8Array {
   }
 
   return out;
+}
+
+export const RCON = new Uint8Array([
+  0x00, 0x01, 0x02, 0x04, 0x08, 0x10,
+  0x20, 0x40, 0x80, 0x1b, 0x36,
+]);
+
+export function rotWord(word: Uint8Array): Uint8Array {
+  assertLength("word", word, WORD_SIZE);
+  return new Uint8Array([word[1], word[2], word[3], word[0]]);
+}
+
+export function subWord(word: Uint8Array): Uint8Array {
+  assertLength("word", word, WORD_SIZE);
+  return new Uint8Array([
+    S_BOX[word[0]],
+    S_BOX[word[1]],
+    S_BOX[word[2]],
+    S_BOX[word[3]],
+  ]);
+}
+
+export function xorWords(left: Uint8Array, right: Uint8Array): Uint8Array {
+  assertLength("left word", left, WORD_SIZE);
+  assertLength("right word", right, WORD_SIZE);
+  return new Uint8Array([
+    left[0] ^ right[0],
+    left[1] ^ right[1],
+    left[2] ^ right[2],
+    left[3] ^ right[3],
+  ]);
 }
 
 function assertLength(label: string, bytes: Uint8Array, expected: number): void {
