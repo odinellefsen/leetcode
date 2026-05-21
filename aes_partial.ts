@@ -121,6 +121,26 @@ export function shiftRows(state: Uint8Array): Uint8Array {
   return out;
 }
 
+export function mixColumns(state: Uint8Array): Uint8Array {
+  assertBlock(state);
+  const out = new Uint8Array(BLOCK_SIZE);
+
+  for (let column = 0; column < 4; column++) {
+    const offset = column * 4;
+    const a0 = state[offset];
+    const a1 = state[offset + 1];
+    const a2 = state[offset + 2];
+    const a3 = state[offset + 3];
+
+    out[offset] = gfMul(a0, 2) ^ gfMul(a1, 3) ^ a2 ^ a3;
+    out[offset + 1] = a0 ^ gfMul(a1, 2) ^ gfMul(a2, 3) ^ a3;
+    out[offset + 2] = a0 ^ a1 ^ gfMul(a2, 2) ^ gfMul(a3, 3);
+    out[offset + 3] = gfMul(a0, 3) ^ a1 ^ a2 ^ gfMul(a3, 2);
+  }
+
+  return out;
+}
+
 function assertLength(label: string, bytes: Uint8Array, expected: number): void {
   if (bytes.length !== expected) {
     throw new Error(`${label} must be ${expected} bytes`);
