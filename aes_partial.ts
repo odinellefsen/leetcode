@@ -25,6 +25,27 @@ export function cloneBytes(bytes: Uint8Array): Uint8Array {
   return new Uint8Array(bytes);
 }
 
+export function xtime(byte: number): number {
+  const shifted = (byte << 1) & 0xff;
+  return (byte & 0x80) === 0 ? shifted : shifted ^ 0x1b;
+}
+
+export function gfMul(left: number, right: number): number {
+  let a = left & 0xff;
+  let b = right & 0xff;
+  let product = 0;
+
+  for (let i = 0; i < 8; i++) {
+    if ((b & 1) !== 0) {
+      product ^= a;
+    }
+    a = xtime(a);
+    b >>>= 1;
+  }
+
+  return product & 0xff;
+}
+
 function assertLength(label: string, bytes: Uint8Array, expected: number): void {
   if (bytes.length !== expected) {
     throw new Error(`${label} must be ${expected} bytes`);
