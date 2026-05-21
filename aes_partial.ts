@@ -107,6 +107,20 @@ export function addRoundKey(state: Uint8Array, roundKey: Uint8Array): Uint8Array
   return out;
 }
 
+export function shiftRows(state: Uint8Array): Uint8Array {
+  assertBlock(state);
+  const out = new Uint8Array(BLOCK_SIZE);
+
+  for (let row = 0; row < 4; row++) {
+    for (let column = 0; column < 4; column++) {
+      const sourceColumn = (column + row) % 4;
+      out[stateIndex(row, column)] = state[stateIndex(row, sourceColumn)];
+    }
+  }
+
+  return out;
+}
+
 function assertLength(label: string, bytes: Uint8Array, expected: number): void {
   if (bytes.length !== expected) {
     throw new Error(`${label} must be ${expected} bytes`);
