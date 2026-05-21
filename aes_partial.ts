@@ -200,6 +200,19 @@ export function expandKey128(key: Uint8Array): Uint8Array {
   return expanded;
 }
 
+export function roundKey(expandedKey: Uint8Array, round: number): Uint8Array {
+  assertLength("expanded key", expandedKey, EXPANDED_KEY_SIZE_128);
+  if (!Number.isInteger(round) || round < 0 || round > AES_128_ROUNDS) {
+    throw new Error(`round must be an integer from 0 to ${AES_128_ROUNDS}`);
+  }
+  const offset = round * BLOCK_SIZE;
+  return expandedKey.slice(offset, offset + BLOCK_SIZE);
+}
+
+export function aesForwardRound(state: Uint8Array, keyForRound: Uint8Array): Uint8Array {
+  return addRoundKey(mixColumns(shiftRows(subBytes(state))), keyForRound);
+}
+
 function assertLength(label: string, bytes: Uint8Array, expected: number): void {
   if (bytes.length !== expected) {
     throw new Error(`${label} must be ${expected} bytes`);
