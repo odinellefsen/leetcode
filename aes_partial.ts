@@ -13,7 +13,7 @@ export const AES_128_CORE_ROUNDS = AES_128_ROUNDS - 1;
 export const TWO_THIRDS_AES_128_ROUNDS = 6;
 export const WORD_SIZE = 4;
 export const EXPANDED_KEY_SIZE_128 = BLOCK_SIZE * (AES_128_ROUNDS + 1);
-export const PARTIAL_AES_ROUNDS = 3;
+export const PARTIAL_AES_ROUNDS = TWO_THIRDS_AES_128_ROUNDS;
 
 export type AesBlock = Uint8Array;
 export type AesKey128 = Uint8Array;
@@ -342,12 +342,12 @@ export function decryptPartialBlock(
 
 export function implementedAes128Fraction(rounds = PARTIAL_AES_ROUNDS): number {
   assertPartialRoundCount(rounds);
-  return rounds / AES_128_ROUNDS;
+  return rounds / AES_128_CORE_ROUNDS;
 }
 
 function assertPartialRoundCount(rounds: number): void {
-  if (!Number.isInteger(rounds) || rounds < 1 || rounds >= AES_128_ROUNDS) {
-    throw new Error(`partial rounds must be an integer from 1 to ${AES_128_ROUNDS - 1}`);
+  if (!Number.isInteger(rounds) || rounds < 1 || rounds > AES_128_CORE_ROUNDS) {
+    throw new Error(`partial rounds must be an integer from 1 to ${AES_128_CORE_ROUNDS}`);
   }
 }
 
