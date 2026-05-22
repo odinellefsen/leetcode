@@ -340,6 +340,14 @@ export function decryptPartialBlock(
   return addRoundKey(state, roundKey(expandedKey, 0));
 }
 
+export function encryptTwoThirdsBlock(block: Uint8Array, key: Uint8Array): Uint8Array {
+  return encryptPartialBlock(block, key, TWO_THIRDS_AES_128_ROUNDS);
+}
+
+export function decryptTwoThirdsBlock(block: Uint8Array, key: Uint8Array): Uint8Array {
+  return decryptPartialBlock(block, key, TWO_THIRDS_AES_128_ROUNDS);
+}
+
 export function implementedAes128Fraction(rounds = PARTIAL_AES_ROUNDS): number {
   assertPartialRoundCount(rounds);
   return rounds / AES_128_CORE_ROUNDS;
