@@ -206,6 +206,26 @@ export function mixColumns(state: Uint8Array): Uint8Array {
   return out;
 }
 
+export function invMixColumns(state: Uint8Array): Uint8Array {
+  assertBlock(state);
+  const out = new Uint8Array(BLOCK_SIZE);
+
+  for (let column = 0; column < 4; column++) {
+    const offset = column * 4;
+    const a0 = state[offset];
+    const a1 = state[offset + 1];
+    const a2 = state[offset + 2];
+    const a3 = state[offset + 3];
+
+    out[offset] = gfMul(a0, 14) ^ gfMul(a1, 11) ^ gfMul(a2, 13) ^ gfMul(a3, 9);
+    out[offset + 1] = gfMul(a0, 9) ^ gfMul(a1, 14) ^ gfMul(a2, 11) ^ gfMul(a3, 13);
+    out[offset + 2] = gfMul(a0, 13) ^ gfMul(a1, 9) ^ gfMul(a2, 14) ^ gfMul(a3, 11);
+    out[offset + 3] = gfMul(a0, 11) ^ gfMul(a1, 13) ^ gfMul(a2, 9) ^ gfMul(a3, 14);
+  }
+
+  return out;
+}
+
 export const RCON = new Uint8Array([
   0x00, 0x01, 0x02, 0x04, 0x08, 0x10,
   0x20, 0x40, 0x80, 0x1b, 0x36,
