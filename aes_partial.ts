@@ -172,6 +172,20 @@ export function shiftRows(state: Uint8Array): Uint8Array {
   return out;
 }
 
+export function invShiftRows(state: Uint8Array): Uint8Array {
+  assertBlock(state);
+  const out = new Uint8Array(BLOCK_SIZE);
+
+  for (let row = 0; row < 4; row++) {
+    for (let column = 0; column < 4; column++) {
+      const sourceColumn = (column - row + 4) % 4;
+      out[stateIndex(row, column)] = state[stateIndex(row, sourceColumn)];
+    }
+  }
+
+  return out;
+}
+
 export function mixColumns(state: Uint8Array): Uint8Array {
   assertBlock(state);
   const out = new Uint8Array(BLOCK_SIZE);
