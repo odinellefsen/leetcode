@@ -296,6 +296,10 @@ export function aesForwardRound(state: Uint8Array, keyForRound: Uint8Array): Uin
   return addRoundKey(mixColumns(shiftRows(subBytes(state))), keyForRound);
 }
 
+export function aesInverseRound(state: Uint8Array, keyForRound: Uint8Array): Uint8Array {
+  return invSubBytes(invShiftRows(invMixColumns(addRoundKey(state, keyForRound))));
+}
+
 export function encryptPartialBlock(
   block: Uint8Array,
   key: Uint8Array,
