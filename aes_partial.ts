@@ -9,6 +9,8 @@
 export const BLOCK_SIZE = 16;
 export const KEY_SIZE_128 = 16;
 export const AES_128_ROUNDS = 10;
+export const AES_128_CORE_ROUNDS = AES_128_ROUNDS - 1;
+export const TWO_THIRDS_AES_128_ROUNDS = 6;
 export const WORD_SIZE = 4;
 export const EXPANDED_KEY_SIZE_128 = BLOCK_SIZE * (AES_128_ROUNDS + 1);
 export const PARTIAL_AES_ROUNDS = 3;
