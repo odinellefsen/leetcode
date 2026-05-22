@@ -28,6 +28,10 @@ export function cloneBytes(bytes: Uint8Array): Uint8Array {
   return new Uint8Array(bytes);
 }
 
+export function sliceBytes(bytes: Uint8Array, start: number, end: number): Uint8Array {
+  return new Uint8Array(bytes.subarray(start, end));
+}
+
 export function xtime(byte: number): number {
   const shifted = (byte << 1) & 0xff;
   return (byte & 0x80) === 0 ? shifted : shifted ^ 0x1b;
@@ -184,7 +188,7 @@ export function expandKey128(key: Uint8Array): Uint8Array {
   let rconIndex = 1;
 
   while (bytesGenerated < EXPANDED_KEY_SIZE_128) {
-    let temp = expanded.slice(bytesGenerated - WORD_SIZE, bytesGenerated);
+    let temp = sliceBytes(expanded, bytesGenerated - WORD_SIZE, bytesGenerated);
 
     if (bytesGenerated % KEY_SIZE_128 === 0) {
       temp = subWord(rotWord(temp));
@@ -207,7 +211,7 @@ export function roundKey(expandedKey: Uint8Array, round: number): Uint8Array {
     throw new Error(`round must be an integer from 0 to ${AES_128_ROUNDS}`);
   }
   const offset = round * BLOCK_SIZE;
-  return expandedKey.slice(offset, offset + BLOCK_SIZE);
+  return sliceBytes(expandedKey, offset, offset + BLOCK_SIZE);
 }
 
 export function aesForwardRound(state: Uint8Array, keyForRound: Uint8Array): Uint8Array {
