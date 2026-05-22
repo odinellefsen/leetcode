@@ -319,6 +319,25 @@ export function encryptPartialBlock(
   return state;
 }
 
+export function decryptPartialBlock(
+  block: Uint8Array,
+  key: Uint8Array,
+  rounds = PARTIAL_AES_ROUNDS,
+): Uint8Array {
+  assertBlock(block);
+  assertKey128(key);
+  assertPartialRoundCount(rounds);
+
+  const expandedKey = expandKey128(key);
+  let state = cloneBytes(block);
+
+  for (let round = rounds; round >= 1; round--) {
+    state = aesInverseRound(state, roundKey(expandedKey, round));
+  }
+
+  return addRoundKey(state, roundKey(expandedKey, 0));
+}
+
 export function implementedAes128Fraction(rounds = PARTIAL_AES_ROUNDS): number {
   assertPartialRoundCount(rounds);
   return rounds / AES_128_ROUNDS;
