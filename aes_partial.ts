@@ -132,6 +132,15 @@ export function subBytes(state: Uint8Array): Uint8Array {
   return out;
 }
 
+export function invSubBytes(state: Uint8Array): Uint8Array {
+  assertBlock(state);
+  const out = new Uint8Array(BLOCK_SIZE);
+  for (let i = 0; i < BLOCK_SIZE; i++) {
+    out[i] = INV_S_BOX[state[i]];
+  }
+  return out;
+}
+
 export function stateIndex(row: number, column: number): number {
   if (row < 0 || row > 3 || column < 0 || column > 3) {
     throw new Error("AES state coordinates must be between 0 and 3");
