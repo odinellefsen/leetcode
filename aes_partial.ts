@@ -430,6 +430,21 @@ export function encryptEcb128(data: Uint8Array, key: Uint8Array): Uint8Array {
   return out;
 }
 
+export function decryptEcb128(data: Uint8Array, key: Uint8Array): Uint8Array {
+  assertKey128(key);
+  if (data.length === 0 || data.length % BLOCK_SIZE !== 0) {
+    throw new Error("ciphertext must be non-empty and block aligned");
+  }
+
+  const padded = new Uint8Array(data.length);
+  for (let offset = 0; offset < data.length; offset += BLOCK_SIZE) {
+    const block = sliceBytes(data, offset, offset + BLOCK_SIZE);
+    padded.set(decryptBlock128(block, key), offset);
+  }
+
+  return pkcs7Unpad(padded);
+}
+
 export function implementedAes128Fraction(rounds = PARTIAL_AES_ROUNDS): number {
   assertPartialRoundCount(rounds);
   return rounds / AES_128_CORE_ROUNDS;
