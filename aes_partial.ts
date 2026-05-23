@@ -389,6 +389,15 @@ export function decryptTwoThirdsBlock(block: Uint8Array, key: Uint8Array): Uint8
   return decryptPartialBlock(block, key, TWO_THIRDS_AES_128_ROUNDS);
 }
 
+export function pkcs7Pad(data: Uint8Array): Uint8Array {
+  const remainder = data.length % BLOCK_SIZE;
+  const padLength = remainder === 0 ? BLOCK_SIZE : BLOCK_SIZE - remainder;
+  const out = new Uint8Array(data.length + padLength);
+  out.set(data);
+  out.fill(padLength, data.length);
+  return out;
+}
+
 export function implementedAes128Fraction(rounds = PARTIAL_AES_ROUNDS): number {
   assertPartialRoundCount(rounds);
   return rounds / AES_128_CORE_ROUNDS;
