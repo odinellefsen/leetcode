@@ -417,6 +417,19 @@ export function pkcs7Unpad(data: Uint8Array): Uint8Array {
   return sliceBytes(data, 0, data.length - padLength);
 }
 
+export function encryptEcb128(data: Uint8Array, key: Uint8Array): Uint8Array {
+  assertKey128(key);
+  const padded = pkcs7Pad(data);
+  const out = new Uint8Array(padded.length);
+
+  for (let offset = 0; offset < padded.length; offset += BLOCK_SIZE) {
+    const block = sliceBytes(padded, offset, offset + BLOCK_SIZE);
+    out.set(encryptBlock128(block, key), offset);
+  }
+
+  return out;
+}
+
 export function implementedAes128Fraction(rounds = PARTIAL_AES_ROUNDS): number {
   assertPartialRoundCount(rounds);
   return rounds / AES_128_CORE_ROUNDS;
