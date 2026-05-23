@@ -312,6 +312,20 @@ export function aesInverseFinalRound(
   return invSubBytes(invShiftRows(addRoundKey(state, keyForRound)));
 }
 
+export function encryptBlock128(block: Uint8Array, key: Uint8Array): Uint8Array {
+  assertBlock(block);
+  assertKey128(key);
+
+  const expandedKey = expandKey128(key);
+  let state = addRoundKey(block, roundKey(expandedKey, 0));
+
+  for (let round = 1; round < AES_128_ROUNDS; round++) {
+    state = aesForwardRound(state, roundKey(expandedKey, round));
+  }
+
+  return aesFinalRound(state, roundKey(expandedKey, AES_128_ROUNDS));
+}
+
 export function encryptPartialBlock(
   block: Uint8Array,
   key: Uint8Array,
