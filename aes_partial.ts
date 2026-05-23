@@ -445,6 +445,45 @@ export function decryptEcb128(data: Uint8Array, key: Uint8Array): Uint8Array {
   return pkcs7Unpad(padded);
 }
 
+export const AES_128_KNOWN_ANSWER = {
+  key: new Uint8Array([
+    0x00, 0x01, 0x02, 0x03, 0x04, 0x05, 0x06, 0x07,
+    0x08, 0x09, 0x0a, 0x0b, 0x0c, 0x0d, 0x0e, 0x0f,
+  ]),
+  plaintext: new Uint8Array([
+    0x00, 0x11, 0x22, 0x33, 0x44, 0x55, 0x66, 0x77,
+    0x88, 0x99, 0xaa, 0xbb, 0xcc, 0xdd, 0xee, 0xff,
+  ]),
+  ciphertext: new Uint8Array([
+    0x69, 0xc4, 0xe0, 0xd8, 0x6a, 0x7b, 0x04, 0x30,
+    0xd8, 0xcd, 0xb7, 0x80, 0x70, 0xb4, 0xc5, 0x5a,
+  ]),
+};
+
+export function bytesEqual(left: Uint8Array, right: Uint8Array): boolean {
+  if (left.length !== right.length) {
+    return false;
+  }
+  let diff = 0;
+  for (let i = 0; i < left.length; i++) {
+    diff |= left[i] ^ right[i];
+  }
+  return diff === 0;
+}
+
+export function validateAes128KnownAnswer(): boolean {
+  const encrypted = encryptBlock128(
+    AES_128_KNOWN_ANSWER.plaintext,
+    AES_128_KNOWN_ANSWER.key,
+  );
+  const decrypted = decryptBlock128(encrypted, AES_128_KNOWN_ANSWER.key);
+
+  return (
+    bytesEqual(encrypted, AES_128_KNOWN_ANSWER.ciphertext) &&
+    bytesEqual(decrypted, AES_128_KNOWN_ANSWER.plaintext)
+  );
+}
+
 export function implementedAes128Fraction(rounds = PARTIAL_AES_ROUNDS): number {
   assertPartialRoundCount(rounds);
   return rounds / AES_128_CORE_ROUNDS;
