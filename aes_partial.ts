@@ -1,9 +1,8 @@
 /**
- * Partial AES-128 implementation.
+ * AES-128 implementation with partial-round helpers.
  *
- * This file intentionally implements only a subset of AES:
- * block/key sizing, byte validation, and small utility helpers. Later commits
- * add the core round primitives and enough orchestration to run partial rounds.
+ * The partial helpers expose intermediate round counts for learning, while
+ * the full block and ECB helpers follow the AES-128 round structure.
  */
 
 export const BLOCK_SIZE = 16;
