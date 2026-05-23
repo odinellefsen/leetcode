@@ -398,6 +398,25 @@ export function pkcs7Pad(data: Uint8Array): Uint8Array {
   return out;
 }
 
+export function pkcs7Unpad(data: Uint8Array): Uint8Array {
+  if (data.length === 0 || data.length % BLOCK_SIZE !== 0) {
+    throw new Error("PKCS7 data must be non-empty and block aligned");
+  }
+
+  const padLength = data[data.length - 1];
+  if (padLength < 1 || padLength > BLOCK_SIZE) {
+    throw new Error("invalid PKCS7 padding length");
+  }
+
+  for (let i = data.length - padLength; i < data.length; i++) {
+    if (data[i] !== padLength) {
+      throw new Error("invalid PKCS7 padding bytes");
+    }
+  }
+
+  return sliceBytes(data, 0, data.length - padLength);
+}
+
 export function implementedAes128Fraction(rounds = PARTIAL_AES_ROUNDS): number {
   assertPartialRoundCount(rounds);
   return rounds / AES_128_CORE_ROUNDS;
