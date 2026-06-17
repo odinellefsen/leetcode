@@ -5,7 +5,7 @@
 var isPalindrome = function(x) {
     let i = 0;
     const x_str = String(x);
-    const half_length = Math.trunc(x_str.length / 2);
+    const half_length = Math.floor(x_str.length / 2);
     
     while (i < half_length) {
         const from_frst_half = x_str[i];
