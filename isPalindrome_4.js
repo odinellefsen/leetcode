@@ -4,6 +4,9 @@
  * @return {boolean}
  */
 var isPalindrome = function(x) {
+    if (x < 0 || (x % 10 === 0 && x !== 0)) {
+        return false;
+    }
     let shrinking_x = x;
     let growing_x = 0;
 
@@ -20,5 +23,5 @@ var isPalindrome = function(x) {
     }
 };
 
-const result = isPalindrome(1212121);
+const result = isPalindrome(10);
 console.log(result);
