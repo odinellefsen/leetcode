@@ -10,8 +10,8 @@ var twoSum = function(nums, target) {
         const difference = target - current_value;
         const diff_get = map.get(difference)
 
-        if (diff_get !== undefined) {
-            return [i, diff_get]
+        if (Number.isFinite(diff_get)) {
+            return [diff_get, i]
         }
 
         map.set(current_value, i)
