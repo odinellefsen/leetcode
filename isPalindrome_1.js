@@ -13,7 +13,7 @@ var isPalindrome = function(x) {
         const from_scnd_half = x_str[x_str.length - 1 - i];
         
         if (from_frst_half !== from_scnd_half) {
-            return false
+            return false;
         }
 
         i++;
@@ -22,5 +22,5 @@ var isPalindrome = function(x) {
     return true;
 };
 
-const result = isPalindrome(1212121)
-console.log(result)
+const result = isPalindrome(1212121);
+console.log(result);

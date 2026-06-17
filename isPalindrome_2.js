@@ -4,6 +4,10 @@
  * @return {boolean}
  */
 var isPalindrome = function(x) {
+    if (x < 0) {
+        return false
+    }
+
     let reversed_num = 0;
     let x_x = x;
     let loop = true;
