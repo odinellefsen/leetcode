@@ -8,7 +8,6 @@ var twoSum = function(nums, target) {
     for (let i = 0; i < nums.length; i++) {
         const current_value = nums[i];
         const difference = target - current_value;
-
         const diff_get = map.get(difference)
 
         if (diff_get !== undefined) {
