@@ -1,3 +1,4 @@
+// time complexity is O(n)
 /**
  * @param {number} x
  * @return {boolean}

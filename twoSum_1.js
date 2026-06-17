@@ -1,4 +1,4 @@
-// slow because O(n^2)
+// slow because time complexity is O(n^2)
 /**
  * @param {number[]} nums
  * @param {number} target

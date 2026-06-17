@@ -1,3 +1,4 @@
+// time compexity is O(n)
 /**
  * @param {number[]} nums
  * @param {number} target
