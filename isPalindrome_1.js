@@ -3,17 +3,23 @@
  * @return {boolean}
  */
 var isPalindrome = function(x) {
+    let i = 0;
     const x_str = String(x);
-    let a = 0
-
     const half_length = Math.trunc(x_str.length / 2);
-    console.log(half_length);
     
-    while (a < x_str.length) {
-        console.log("hello bruh", x_str[x_str.length - 1])
-        a = 100;
+    while (i < half_length) {
+        const from_frst_half = x_str[i];
+        const from_scnd_half = x_str[x_str.length - 1 - i];
+        
+        if (from_frst_half !== from_scnd_half) {
+            return false
+        }
+
+        i++;
     }
+
+    return true;
 };
 
-const result = isPalindrome(1214)
+const result = isPalindrome(1212121)
 console.log(result)
