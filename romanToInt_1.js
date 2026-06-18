@@ -20,7 +20,7 @@ var romanToInt = function(s) {
         const current_value = roman_to_value_mapping[s[i]];
         const former_value = roman_to_value_mapping[s[i-1]];
         
-        if (i !== 0 && current_value < former_value) {
+        if (i !== 0 && current_value <= former_value) {
             converted_value += current_value;
         }
         else if (i !== 0 && current_value > former_value) {
@@ -34,6 +34,7 @@ var romanToInt = function(s) {
     return converted_value;
 };
 
-const result = romanToInt("LVIII");
+// const result = romanToInt("LVIII");
+const result = romanToInt("MCMXCIV");
 
 console.log("Result: ", result);
