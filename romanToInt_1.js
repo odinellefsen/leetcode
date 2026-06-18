@@ -15,17 +15,18 @@ const roman_to_value_mapping = {
 
 var romanToInt = function(s) {
     let converted_value = 0;
-    for (let i = 0; i < s.length - 1; i++) {
+    for (let i = 0; i < s.length; i++) {
+        console.log("");
         console.log("converted value: ", converted_value);
         const current_value = roman_to_value_mapping[s[i]];
+        console.log("current_value: ", current_value, s[i])
         const next_value = roman_to_value_mapping[s[i+1]];
         
-        if (current_value >= next_value) {
+        if (next_value <= current_value) {
             converted_value += current_value;
         }
-        else if (current_value < next_value) {
-            const subtract_value = next_value - current_value
-            converted_value += subtract_value;
+        else if (next_value > current_value) {
+            converted_value -= current_value;
         }
     }
 
