@@ -19,7 +19,7 @@ var romanToInt = function(s) {
         const current_value = roman_to_value_mapping[s[i]];
         const next_value = roman_to_value_mapping[s[i+1]];
         
-        if (next_value <= current_value) {
+        if (next_value <= current_value || next_value === undefined) {
             converted_value += current_value;
         }
         else if (next_value > current_value) {
