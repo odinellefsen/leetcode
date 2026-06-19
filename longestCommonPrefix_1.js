@@ -12,13 +12,21 @@ var longestCommonPrefix = function(strs) {
     
     let longest_common_prefix = "";
     for (let i = 0; i < shortest_word.length; i++) {
-        for (const current_word of strs) {
+        let char_match = "";
+        for (let j = 0; j < strs.length; j++) {
+            if (strs[j][i] === char_match || char_match === "") {
+                char_match = strs[j][i];
+                continue;
+            }
 
+            char_match = "";
+            break;
         }
+        longest_common_prefix += char_match;
     }
-
+    return longest_common_prefix;
 };
 
 const result = longestCommonPrefix(["flower","flow","flight"])
 
-// console.log("result: ", result);
+console.log("result: ", result);
