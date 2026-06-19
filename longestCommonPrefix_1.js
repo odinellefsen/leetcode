@@ -10,8 +10,10 @@ var longestCommonPrefix = function(strs) {
         }
     }
     
-    
-    
+    for (let i = 0; i < shortest_word.length; i++) {
+        
+    }
+
 };
 
 const result = longestCommonPrefix(["flower","flow","flight"])
