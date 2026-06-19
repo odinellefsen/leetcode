@@ -10,8 +10,11 @@ var longestCommonPrefix = function(strs) {
         }
     }
     
+    let longest_common_prefix = "";
     for (let i = 0; i < shortest_word.length; i++) {
-        
+        for (const current_word of strs) {
+
+        }
     }
 
 };
