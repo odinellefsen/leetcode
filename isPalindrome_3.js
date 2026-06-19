@@ -28,8 +28,6 @@ var isPalindrome = function(x) {
             loop = false;
         }
 
-        
-
         i--;
     }
     if (x === reversed_num) {

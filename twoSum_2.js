@@ -17,7 +17,6 @@ var twoSum = function(nums, target) {
 
         map.set(current_value, i)
     }
-    
 };
 
 const result = twoSum([2,7,11,15], 9);
