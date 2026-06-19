@@ -11,7 +11,7 @@ var longestCommonPrefix = function(strs) {
     }
     
     let longest_common_prefix = "";
-    for (let i = 0; i < shortest_word.length; i++) {
+    outerLoop: for (let i = 0; i < shortest_word.length; i++) {
         let char_match = "";
         for (let j = 0; j < strs.length; j++) {
             if (strs[j][i] === char_match || char_match === "") {
@@ -19,8 +19,7 @@ var longestCommonPrefix = function(strs) {
                 continue;
             }
 
-            char_match = "";
-            break;
+            break outerLoop;
         }
         longest_common_prefix += char_match;
     }
