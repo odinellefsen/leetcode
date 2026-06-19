@@ -8,36 +8,34 @@ var isValid = function(s) {
     for (let i = 0; i < s.length; i++) {
 
         if (s[i] === "(") {
-            map.set("(",  map.get("(") ?? 0 + 1)
+            map.set("(",  map.get("(") ?? 0 + 1);
         }
 
         if (s[i] === "[") {
-            map.set("[", map.get("[") ?? 0 + 1)
+            map.set("[", map.get("[") ?? 0 + 1);
+        }
+
+        if (s[i] === "{") {
+            map.set("{", map.get("{") ?? 0 + 1);
         }
         
         if (s[i] === ")" && map.get("(") >= 1) {
-            map["("] = map.get("(") - 1;
-        } else {
-            for (const [key, value] of map) {
-                console.log(key, value);
-            }
+            map.set("(", map.get("(") - 1);
+        } else if (s[i] === ")") {
             return false;
         }
         if (s[i] === "]" && map.get("[") >= 1) {
-            map["["] = map.get("[") - 1
-        } else {
-            for (const [key, value] of map) {
-                console.log(key, value);
-            }
+            map.set("[", map.get("[") - 1);
+        } else if (s[i] === "]") {
             return false;
         }
     }
-    
+
     for (const [key, value] of map) {
         console.log(key, value);
     }
 };
 
-const result = isValid("()[]{}");
+const result = isValid("()[]");
 
 // console.log("result: ", result)
